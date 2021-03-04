@@ -1,23 +1,23 @@
 # Iroha nodes for BSMD
-Install for Iroha nodes for BSMD experiments or test. This guide is meant for Debian based systems (Ubuntu, 
-Mint, Kali, etc.), but with a few modifications this guide will also work for Windows or macOS. 
+Install four Iroha nodes for BSMD experiments or test. This guide is meant for Debian based systems (Ubuntu, 
+Mint, Kali, etc.), but with a few modifications this will also work for Windows or macOS. 
 
 The Iroha nodes run on four Docker containers. Visit the [Docker](https://www.docker.com/) web page to familiarize 
 with the system. If you have never work with Docker I recommend the 
 [Docker 101 tutorial](https://www.docker.com/101-tutorial) before continuing.   
 
 # Pre-requisites
-1. Install Docker by following the official [guide](https://docs.docker.com/engine/install/ubuntu/). Then follow this
+1. Install Docker by following the official [guide](https://docs.docker.com/engine/install/ubuntu/). Then, follow this
 [guide](https://docs.docker.com/engine/install/linux-postinstall/) to make Docker run as non-root user
 
-2. Install Docker-compose with the following commands
+2. Install docker-compose with the following commands:
 ```commandline
 curl -L "https://github.com/docker/compose/releases/download/1.26.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 ```
 ```commandline
 chmod +x /usr/local/bin/docker-compose
 ```
-3. Test the installation with
+3. Test the installation with:
 ```commandline
 docker-compose --version
 ```
