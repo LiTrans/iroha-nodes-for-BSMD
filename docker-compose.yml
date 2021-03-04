@@ -1,0 +1,137 @@
+version: '3.5'
+
+services:
+#  Install postgres containers. One container per node
+#  (Probably this will work with one postgres container for all nodes)
+  postgres_0:
+    image: postgres:9.5
+    container_name: some-postgres_0
+    ports:
+      - "5435:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    restart: always
+
+  postgres_1:
+    image: postgres:9.5
+    container_name: some-postgres_1
+    ports:
+      - "5436:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    restart: always
+
+  postgres_2:
+    image: postgres:9.5
+    container_name: some-postgres_2
+    ports:
+      - "5437:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    restart: always
+
+  postgres_3:
+    image: postgres:9.5
+    container_name: some-postgres_3
+    ports:
+      - "5438:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    restart: always
+
+#  Install four iroha nodes for the BSMD
+  iroha_0:
+    image: hyperledger/iroha:latest
+    container_name: iroha_0
+    ports:
+      - "50051:50051"
+    environment:
+      - IROHA_POSTGRES_HOST=some-postgres_0
+      - IROHA_POSTGRES_PORT=5435
+      - IROHA_POSTGRES_PASSWORD=postgres
+      - IROHA_POSTGRES_USER=postgres
+      - CCACHE_DIR=/tmp/block_store
+      - KEY=node0
+    depends_on:
+      - postgres_0
+    volumes:
+      - ${PWD}/config_0:/opt/iroha_data
+      - blockstore_0:/tmp/block_store
+    working_dir: /opt/iroha_data
+    restart: always
+
+  iroha_1:
+    image: hyperledger/iroha:latest
+    container_name: iroha_1
+    ports:
+      - "50052:50051"
+    environment:
+      - IROHA_POSTGRES_HOST=some-postgres_1
+      - IROHA_POSTGRES_PORT=5436
+      - IROHA_POSTGRES_PASSWORD=postgres
+      - IROHA_POSTGRES_USER=postgres
+      - CCACHE_DIR=/tmp/block_store
+      - KEY=node1
+    depends_on:
+      - postgres_1
+      - iroha_0
+    volumes:
+      - ${PWD}/config_1:/opt/iroha_data
+      - blockstore_1:/tmp/block_store
+    working_dir: /opt/iroha_data
+    restart: always
+
+  iroha_2:
+    image: hyperledger/iroha:latest
+    container_name: iroha_2
+    ports:
+      - "50053:50051"
+    environment:
+      - IROHA_POSTGRES_HOST=some-postgres_2
+      - IROHA_POSTGRES_PORT=5437
+      - IROHA_POSTGRES_PASSWORD=postgres
+      - IROHA_POSTGRES_USER=postgres
+      - CCACHE_DIR=/tmp/block_store
+      - KEY=node2
+    depends_on:
+      - postgres_2
+      - iroha_0
+      - iroha_1
+    volumes:
+      - ${PWD}/config_2:/opt/iroha_data
+      - blockstore_2:/tmp/block_store
+    working_dir: /opt/iroha_data
+    restart: always
+
+  iroha_3:
+    image: hyperledger/iroha:latest
+    container_name: iroha_3
+    ports:
+      - "50054:50051"
+    environment:
+      - IROHA_POSTGRES_HOST=some-postgres_3
+      - IROHA_POSTGRES_PORT=5438
+      - IROHA_POSTGRES_PASSWORD=postgres
+      - IROHA_POSTGRES_USER=postgres
+      - CCACHE_DIR=/tmp/block_store
+      - KEY=node3
+    depends_on:
+      - postgres_3
+      - iroha_1
+      - iroha_2
+      - iroha_0
+    volumes:
+      - ${PWD}/config_3:/opt/iroha_data
+      - blockstore_3:/tmp/block_store
+    working_dir: /opt/iroha_data
+    restart: always
+
+volumes:
+  blockstore_0:
+  blockstore_1:
+  blockstore_2:
+  blockstore_3:
